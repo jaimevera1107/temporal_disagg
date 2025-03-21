@@ -6,8 +6,29 @@ from joblib import Parallel, delayed
 from .base import TempDisBase
 from .conversion_matrix import CovMatrixBuilder
 
+
 class RhoOptimizer:
-    def rho_optimization(self, y_l, X, C, method="maxlog", min_rho = -1.999, max_rho = 1.999):
+    """
+    Class for optimizing the autocorrelation parameter (rho)
+    used in covariance structures for temporal disaggregation.
+    """
+
+    def rho_optimization(self, y_l, X, C, method="maxlog", min_rho=-1.999, max_rho=1.999):
+        """
+        Estimates the optimal rho value using either log-likelihood maximization
+        or residual sum minimization.
+
+        Parameters:
+            y_l (np.ndarray): Low-frequency target series.
+            X (np.ndarray): High-frequency indicator series.
+            C (np.ndarray): Conversion matrix.
+            method (str): Optimization criterion ("maxlog" or "minrss").
+            min_rho (float): Lower bound for rho search.
+            max_rho (float): Upper bound for rho search.
+
+        Returns:
+            float: Optimal value of rho.
+        """
         X_l = np.atleast_2d(C @ X)
         pm = CovMatrixBuilder().power_matrix_calculation(X.shape[0])
         y_l, X, C = TempDisBase().preprocess_inputs(y_l, X, C)

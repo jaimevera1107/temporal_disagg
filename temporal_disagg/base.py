@@ -3,22 +3,53 @@ import numpy as np
 from scipy.optimize import minimize
 from joblib import Parallel, delayed
 
+
 class TempDisBase:
+    """
+    Base class for temporal disaggregation models.
+    Provides preprocessing and ensemble functionalities.
+    """
+
     def preprocess_inputs(self, y_l, X, C):
+        """
+        Ensures input arrays have correct shape and compatibility.
+
+        Parameters:
+            y_l (np.ndarray): Low-frequency series (target).
+            X (np.ndarray): High-frequency indicator series.
+            C (np.ndarray): Conversion matrix.
+
+        Returns:
+            Tuple of reshaped and validated (y_l, X, C).
+        """
         y_l = np.atleast_2d(y_l).reshape(-1, 1)
         X = np.atleast_2d(X).reshape(-1, 1)
 
         if not isinstance(C, np.ndarray):
-            raise TypeError("C must a numpy array.")
-        
+            raise TypeError("C must be a numpy array.")
+
         if C.shape[0] != y_l.shape[0]:
-            raise ValueError(f"Shape mismatch: C.shape[0] ({C.shape[0]}) != y_l.shape[0] ({y_l.shape[0]})")
+            raise ValueError(
+                f"Shape mismatch: C.shape[0] ({C.shape[0]}) != y_l.shape[0] ({y_l.shape[0]})"
+            )
         if C.shape[1] != X.shape[0]:
-            raise ValueError(f"Shape mismatch: C.shape[1] ({C.shape[1]}) != X.shape[0] ({X.shape[0]})")
+            raise ValueError(
+                f"Shape mismatch: C.shape[1] ({C.shape[1]}) != X.shape[0] ({X.shape[0]})"
+            )
 
         return y_l, X, C
 
     def build_conversion_matrix(self, df, conversion):
+        """
+        Builds the conversion matrix C based on the conversion method.
+
+        Parameters:
+            df (pd.DataFrame): DataFrame with 'Index' and 'Grain' columns.
+            conversion (str): Aggregation scheme ('sum', 'average', 'first', 'last').
+
+        Returns:
+            np.ndarray: Conversion matrix.
+        """
         unique_combinations = df[["Index", "Grain"]].drop_duplicates().sort_values(["Index", "Grain"])
         unique_indexes = unique_combinations["Index"].unique()
         n_l = len(unique_indexes)
@@ -45,8 +76,19 @@ class TempDisBase:
             C[i, mask] = get_conversion_vector(num_valid, conversion)
 
         return C
-    
+
     def ensemble_prediction(self, df, conversion, methods):
+        """
+        Combines multiple prediction methods using an ensemble weighted by accuracy metrics.
+
+        Parameters:
+            df (pd.DataFrame): Input DataFrame with columns 'Index', 'y', 'X'.
+            conversion (str): Aggregation method.
+            methods (dict): Dictionary of method_name: method_instance pairs.
+
+        Returns:
+            pd.DataFrame: DataFrame with new column 'y_hat' as ensemble prediction.
+        """
         df_predicted = df.copy()
         C = self.build_conversion_matrix(df_predicted, conversion)
         y_l = df_predicted.groupby("Index")["y"].first().values.reshape(-1, 1)
@@ -58,17 +100,21 @@ class TempDisBase:
                 if pred is not None and not np.isnan(pred).all() and pred.shape[0] == X.shape[0]:
                     return method_name, pred.flatten()
             except Exception as e:
-                print(f"Error en el método {method_name}: {e}")
+                print(f"Error in method {method_name}: {e}")
             return method_name, np.full_like(X.flatten(), np.nan)
 
-        results = Parallel(n_jobs=-1)(delayed(predict_method)(name, cls) for name, cls in methods.items())
+        results = Parallel(n_jobs=-1)(
+            delayed(predict_method)(name, cls) for name, cls in methods.items()
+        )
 
         predictions = {name: pred for name, pred in results if not np.isnan(pred).all()}
 
         if not predictions:
             raise ValueError("No prediction could be estimated.")
 
-        y_hats = np.column_stack([pred for pred in predictions.values() if not np.isnan(pred).all()])
+        y_hats = np.column_stack(
+            [pred for pred in predictions.values() if not np.isnan(pred).all()]
+        )
 
         if y_hats.shape[1] == 0:
             raise ValueError("No prediction was valid.")
@@ -88,7 +134,8 @@ class TempDisBase:
             volatility_norm = (volatility - volatility.min()) / (volatility.max() - volatility.min())
 
         correlation = np.array([
-            np.corrcoef(y_hats[:, i], y_l.flatten())[0, 1] if y_hats.shape[0] == y_l.shape[0] else 0
+            np.corrcoef(y_hats[:, i], y_l.flatten())[0, 1]
+            if y_hats.shape[0] == y_l.shape[0] else 0
             for i in range(y_hats.shape[1])
         ])
 

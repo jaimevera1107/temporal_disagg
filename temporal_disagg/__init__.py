@@ -1,8 +1,17 @@
+"""
+TemporalDisagg: A Python package for temporal disaggregation of time series.
+
+Provides multiple econometric and statistical methods to estimate high-frequency series
+from low-frequency aggregates, including Chow-Lin, Denton, Litterman, OLS-based models,
+retropolation techniques, and ensemble forecasting tools.
+"""
+
 import pandas as pd
 import numpy as np
 from scipy.linalg import toeplitz, pinv, solve
 from scipy.optimize import minimize_scalar, minimize
 from joblib import Parallel, delayed
+
 from .preprocessing import TimeSeriesPreprocessor
 from .base import TempDisBase
 from .estimation import TempDisModel
@@ -21,7 +30,6 @@ from .models.litterman import Litterman, LittermanOpt
 from .models.ols import OLS
 from .models.uniform import Uniform
 
-
 __all__ = [
     "TimeSeriesPreprocessor",
     "TempDisBase",
@@ -30,12 +38,19 @@ __all__ = [
     "RhoOptimizer",
     "TemporalAggregation",
     "Retropolation",
-    "ChowLin", "ChowLinFixed", "ChowLinOpt", "ChowLinEcotrim", "ChowLinQuilis",
-    "Denton", "DentonCholette",
-    "DynamicChowLin", "DynamicLitterman",
+    "ChowLin",
+    "ChowLinFixed",
+    "ChowLinOpt",
+    "ChowLinEcotrim",
+    "ChowLinQuilis",
+    "Denton",
+    "DentonCholette",
+    "DynamicChowLin",
+    "DynamicLitterman",
     "Fast",
     "Fernandez",
-    "Litterman", "LittermanOpt",
+    "Litterman",
+    "LittermanOpt",
     "OLS",
     "Uniform"
 ]

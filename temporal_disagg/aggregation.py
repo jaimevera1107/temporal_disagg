@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 class TemporalAggregation:
     """
     Class for temporal aggregation of high-frequency time series into low-frequency series.
@@ -19,7 +20,6 @@ class TemporalAggregation:
         """
         if conversion not in ["sum", "average", "first", "last"]:
             raise ValueError("Invalid conversion method. Choose from 'sum', 'average', 'first', 'last'.")
-        
         self.conversion = conversion
 
     def aggregate(self, df, time_col, value_col, freq):
@@ -33,12 +33,12 @@ class TemporalAggregation:
             freq (str): Target frequency ('M' for monthly, 'Q' for quarterly, 'A' for annual).
 
         Returns:
-            pd.DataFrame: Aggregated time series.
+            pd.DataFrame: Aggregated time series with datetime index reset.
         """
         df = df.copy()
         df[time_col] = pd.to_datetime(df[time_col])
         df.set_index(time_col, inplace=True)
-        
+
         if self.conversion == "sum":
             aggregated = df[value_col].resample(freq).sum()
         elif self.conversion == "average":
@@ -47,5 +47,5 @@ class TemporalAggregation:
             aggregated = df[value_col].resample(freq).first()
         elif self.conversion == "last":
             aggregated = df[value_col].resample(freq).last()
-        
+
         return aggregated.reset_index()

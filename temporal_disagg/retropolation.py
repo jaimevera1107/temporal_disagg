@@ -19,10 +19,10 @@ class Retropolation:
         Initializes the class with the DataFrame and relevant columns.
 
         Parameters:
-        - df: pd.DataFrame -> DataFrame containing the data series.
-        - new_col: str -> Name of the column with the new methodology.
-        - old_col: str -> Name of the column with the old methodology.
-        - interp_method: str -> Interpolation method to fill missing values (default: "linear").
+            df (pd.DataFrame): DataFrame containing the data series.
+            new_col (str): Name of the column with the new methodology.
+            old_col (str): Name of the column with the old methodology.
+            interp_method (str): Interpolation method to fill missing values (default: "linear").
         """
         try:
             self.df = df.copy()
@@ -34,7 +34,7 @@ class Retropolation:
             self.df[self.new_col] = self.df[self.new_col].interpolate(method=self.interp_method).ffill().bfill()
             self.df[self.old_col] = self.df[self.old_col].interpolate(method=self.interp_method).ffill().bfill()
 
-            # 🔹 Si después de la interpolación hay menos de 3 muestras, deshabilitar estimación
+            # If after interpolation there are fewer than 3 samples, disable estimation
             valid_data = self.df.dropna(subset=[self.new_col, self.old_col])
             self.disable_estimation = valid_data.shape[0] < 3
 
@@ -42,7 +42,16 @@ class Retropolation:
             print(f"Error initializing Retropolation: {e}")
 
     def _convert_input(self, X, y=None):
-        """Converts inputs to NumPy arrays or Pandas Series depending on their structure."""
+        """
+        Converts inputs to NumPy arrays or Pandas Series depending on their structure.
+
+        Parameters:
+            X: pd.Series or pd.DataFrame
+            y: pd.Series or pd.DataFrame (optional)
+
+        Returns:
+            Tuple[np.ndarray, Optional[np.ndarray]]
+        """
         if isinstance(X, (pd.DataFrame, pd.Series)):
             X = X.to_numpy().reshape(-1, 1)
         if y is not None and isinstance(y, (pd.DataFrame, pd.Series)):
@@ -50,7 +59,12 @@ class Retropolation:
         return X, y
 
     def _linear_regression(self, mask_retropolar):
-        """Applies linear regression for retropolarization."""
+        """
+        Applies linear regression for retropolarization.
+
+        Parameters:
+            mask_retropolar (pd.Series): Boolean mask indicating rows to retropolate.
+        """
         try:
             valid_data = self.df.dropna(subset=[self.new_col, self.old_col])
             if valid_data.shape[0] < 2:
@@ -65,7 +79,12 @@ class Retropolation:
             print(f"Error in _linear_regression: {e}")
 
     def _polynomial_regression(self, mask_retropolar):
-        """Applies polynomial regression for retropolarization."""
+        """
+        Applies polynomial regression for retropolarization.
+
+        Parameters:
+            mask_retropolar (pd.Series): Boolean mask indicating rows to retropolate.
+        """
         try:
             valid_data = self.df.dropna(subset=[self.new_col, self.old_col])
             if valid_data.shape[0] < 3:
@@ -81,7 +100,13 @@ class Retropolation:
             print(f"Error in _polynomial_regression: {e}")
 
     def _exponential_smoothing(self, mask_retropolar, alpha=0.5):
-        """Applies exponential smoothing to retropolarize values."""
+        """
+        Applies exponential smoothing to retropolarize values.
+
+        Parameters:
+            mask_retropolar (pd.Series): Boolean mask indicating rows to retropolate.
+            alpha (float): Smoothing factor (default: 0.5).
+        """
         try:
             smoothed_values = self.df[self.new_col].ewm(alpha=alpha, adjust=False).mean()
             if smoothed_values.dropna().shape[0] < 3:
@@ -93,14 +118,25 @@ class Retropolation:
             print(f"Error in _exponential_smoothing: {e}")
 
     def _mlp_regression(self, mask_retropolar):
-        """Applies regression using a neural network (MLP Regressor)."""
+        """
+        Applies regression using a neural network (MLP Regressor).
+
+        Parameters:
+            mask_retropolar (pd.Series): Boolean mask indicating rows to retropolate.
+        """
         try:
             valid_data = self.df.dropna(subset=[self.new_col, self.old_col])
             if valid_data.shape[0] < 5:
                 return
 
             X, y = self._convert_input(valid_data[self.old_col], valid_data[self.new_col])
-            model = MLPRegressor(hidden_layer_sizes=(1000,), max_iter=10000, activation="tanh", alpha=0.001, random_state=0)
+            model = MLPRegressor(
+                hidden_layer_sizes=(1000,),
+                max_iter=10000,
+                activation="tanh",
+                alpha=0.001,
+                random_state=0
+            )
             model.fit(X, y)
             X_pred, _ = self._convert_input(self.df.loc[mask_retropolar, self.old_col])
             self.df.loc[mask_retropolar, self.new_col] = model.predict(X_pred)
@@ -112,12 +148,16 @@ class Retropolation:
         """
         Executes retropolarization using the specified method.
 
-        Parameter:
-        - method: str -> Method to use ('proportion', 'linear_regression', 'polynomial_regression',
-                          'exponential_smoothing', 'mlp_regression').
+        Parameters:
+            method (str): Method to use. Options are:
+                - 'proportion'
+                - 'linear_regression'
+                - 'polynomial_regression'
+                - 'exponential_smoothing'
+                - 'mlp_regression'
 
         Returns:
-        - pd.Series -> Series with retropolarized values.
+            pd.Series: Series with retropolarized values.
         """
         try:
             methods = {
@@ -129,9 +169,9 @@ class Retropolation:
             }
 
             if method not in methods:
-                print(f"🚨 Método inválido detectado: {method}")
+                print(f"🚨 Invalid method detected: {method}")
                 raise ValueError(f"Invalid method '{method}'. Choose from: {list(methods.keys())}")
-            
+
             if self.disable_estimation:
                 warnings.warn("Not enough data for estimation. Returning the interpolated series.")
                 return self.df[self.new_col]

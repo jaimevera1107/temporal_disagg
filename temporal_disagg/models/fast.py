@@ -5,8 +5,27 @@ from scipy.optimize import minimize_scalar, minimize
 from joblib import Parallel, delayed
 from ..base import TempDisBase
 
+
 class Fast:
+    """
+    Fast method for temporal disaggregation using a fixed smoothing parameter.
+
+    This method uses a fixed value of rho (0.9) and a structure similar to
+    the Litterman model, offering a quick approximation with reduced computational cost.
+    """
+
     def estimate(self, y_l, X, C):
+        """
+        Estimates the high-frequency series using a fast disaggregation approach.
+
+        Parameters:
+            y_l (np.ndarray): Low-frequency target series.
+            X (np.ndarray): High-frequency indicator series.
+            C (np.ndarray): Conversion matrix.
+
+        Returns:
+            np.ndarray: High-frequency estimate.
+        """
         rho = 0.9
         n = len(X)
         y_l, X, C = TempDisBase().preprocess_inputs(y_l, X, C)

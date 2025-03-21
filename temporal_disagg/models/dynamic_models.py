@@ -6,8 +6,27 @@ from joblib import Parallel, delayed
 from ..base import TempDisBase
 from ..optimization import RhoOptimizer
 
+
 class DynamicChowLin:
+    """
+    Dynamic Chow-Lin method with automatic optimization of the rho parameter.
+
+    This method extends the Chow-Lin disaggregation by dynamically selecting the
+    autocorrelation parameter that maximizes the log-likelihood.
+    """
+
     def estimate(self, y_l, X, C):
+        """
+        Estimates the high-frequency series using the dynamic Chow-Lin method.
+
+        Parameters:
+            y_l (np.ndarray): Low-frequency target series.
+            X (np.ndarray): High-frequency indicator series.
+            C (np.ndarray): Conversion matrix.
+
+        Returns:
+            np.ndarray: High-frequency estimate.
+        """
         y_l, X, C = TempDisBase().preprocess_inputs(y_l, X, C)
         rho_opt = RhoOptimizer().rho_optimization(y_l, X, C, method="maxlog")
         n = X.shape[0]
@@ -19,9 +38,28 @@ class DynamicChowLin:
         D = Sigma_CL @ C.T @ inv_Q
         u_l = y_l - C @ p
         return (p + D @ u_l).flatten()
-    
+
+
 class DynamicLitterman:
+    """
+    Dynamic Litterman method with optimized smoothing parameter.
+
+    Extends the Litterman disaggregation method by automatically finding the optimal
+    smoothing parameter (rho) that minimizes the residual sum of squares.
+    """
+
     def estimate(self, y_l, X, C):
+        """
+        Estimates the high-frequency series using the dynamic Litterman method.
+
+        Parameters:
+            y_l (np.ndarray): Low-frequency target series.
+            X (np.ndarray): High-frequency indicator series.
+            C (np.ndarray): Conversion matrix.
+
+        Returns:
+            np.ndarray: High-frequency estimate.
+        """
         y_l, X, C = TempDisBase().preprocess_inputs(y_l, X, C)
         rho_opt = RhoOptimizer().rho_optimization(y_l, X, C, method="minrss")
         n = len(X)
@@ -33,5 +71,5 @@ class DynamicLitterman:
         p = X @ beta
         D = Sigma_L @ C.T @ inv_Q
         u_l = y_l - C @ p
-        
+
         return (p + D @ u_l).flatten()

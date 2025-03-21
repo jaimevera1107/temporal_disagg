@@ -22,6 +22,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
+*.spec
 
 # PyInstaller
 *.manifest
@@ -121,3 +123,8 @@ __pypackages__/
 *.out
 *.dat
 *.csv
+
+# Lock files
+poetry.lock
+*.lock
+*.toml.lock

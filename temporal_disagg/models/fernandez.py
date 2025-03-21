@@ -5,8 +5,27 @@ from scipy.optimize import minimize_scalar, minimize
 from joblib import Parallel, delayed
 from ..base import TempDisBase
 
+
 class Fernandez:
+    """
+    Fernandez method for temporal disaggregation.
+
+    Uses an autoregressive-like structure to extrapolate high-frequency estimates
+    from a low-frequency target while minimizing the second-order differences.
+    """
+
     def estimate(self, y_l, X, C):
+        """
+        Estimates the high-frequency series using the Fernandez method.
+
+        Parameters:
+            y_l (np.ndarray): Low-frequency target series.
+            X (np.ndarray): High-frequency indicator series.
+            C (np.ndarray): Conversion matrix.
+
+        Returns:
+            np.ndarray: High-frequency estimate.
+        """
         n = len(X)
         y_l, X, C = TempDisBase().preprocess_inputs(y_l, X, C)
         Delta = np.eye(n) - np.diag(np.ones(n - 1), -1)

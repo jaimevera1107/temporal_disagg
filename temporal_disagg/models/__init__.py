@@ -1,3 +1,11 @@
+"""
+Models for temporal disaggregation.
+
+This submodule includes various statistical and econometric methods to estimate
+high-frequency series from low-frequency aggregates. Each model implements the 
+`estimate()` method and follows a standardized interface.
+"""
+
 from .chow_lin import ChowLin, ChowLinFixed, ChowLinOpt, ChowLinEcotrim, ChowLinQuilis
 from .denton import Denton
 from .denton_cholette import DentonCholette
@@ -9,12 +17,19 @@ from .ols import OLS
 from .uniform import Uniform
 
 __all__ = [
-    "ChowLin", "ChowLinFixed", "ChowLinOpt", "ChowLinEcotrim", "ChowLinQuilis",
-    "Denton", "DentonCholette",
-    "DynamicChowLin", "DynamicLitterman",
+    "ChowLin",
+    "ChowLinFixed",
+    "ChowLinOpt",
+    "ChowLinEcotrim",
+    "ChowLinQuilis",
+    "Denton",
+    "DentonCholette",
+    "DynamicChowLin",
+    "DynamicLitterman",
     "Fast",
     "Fernandez",
-    "Litterman", "LittermanOpt",
+    "Litterman",
+    "LittermanOpt",
     "OLS",
     "Uniform"
 ]

@@ -5,8 +5,29 @@ from scipy.optimize import minimize_scalar, minimize
 from joblib import Parallel, delayed
 from ..base import TempDisBase
 
+
 class DentonCholette:
+    """
+    Denton-Cholette method for temporal disaggregation.
+
+    This method applies a smoothing transformation to the residuals between
+    the target aggregate and the extrapolated high-frequency series, minimizing
+    the volatility of changes while preserving the low-frequency constraints.
+    """
+
     def estimate(self, y_l, X, C, h=1):
+        """
+        Estimates the high-frequency series using the Denton-Cholette method.
+
+        Parameters:
+            y_l (np.ndarray): Low-frequency target series.
+            X (np.ndarray): High-frequency indicator series.
+            C (np.ndarray): Conversion matrix.
+            h (int): Degree of differencing used for penalization (default: 1).
+
+        Returns:
+            np.ndarray: High-frequency estimate adjusted for smoothness and coherence.
+        """
         n = len(X)
         y_l, X, C = TempDisBase().preprocess_inputs(y_l, X, C)
         D = np.eye(n) - np.diag(np.ones(n - 1), -1)
