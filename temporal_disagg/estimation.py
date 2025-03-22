@@ -60,10 +60,22 @@ class TempDisModel(TempDisBase):
             interp_method (str): Method used for interpolating missing values.
             **kwargs: Additional arguments for the estimator.
         """
-        self.index_col = index_col
-        self.grain_col = grain_col
-        self.value_col = value_col
-        self.indicator_col = indicator_col
+        # Rename user-provided columns to standard internal names
+        column_rename_map = {
+            index_col: "Index",
+            grain_col: "Grain",
+            value_col: "y",
+            indicator_col: "X"
+        }
+
+        df = df.rename(columns=column_rename_map)
+
+        # Overwrite internal names with standard ones
+        self.index_col = "Index"
+        self.grain_col = "Grain"
+        self.value_col = "y"
+        self.indicator_col = "X"
+
         self.conversion = conversion
         self.method = method
         self.ensemble = ensemble
