@@ -20,7 +20,6 @@ class TimeSeriesPreprocessor:
         grain_col=None,
         value_col=None,
         indicator_col=None,
-        freq_mapping=None,
         interp_method='nearest'
     ):
         """
@@ -32,7 +31,6 @@ class TimeSeriesPreprocessor:
             grain_col (str): Column indicating the high-frequency grain/position.
             value_col (str): Column containing the target variable (low-freq).
             indicator_col (str): Column containing the high-frequency indicator.
-            freq_mapping (dict): Optional mapping for grain labels to numeric values.
             interp_method (str): Interpolation method for missing values (default: 'nearest').
         """
         self.df = df.copy() if df is not None else None
@@ -40,7 +38,6 @@ class TimeSeriesPreprocessor:
         self.grain_col = grain_col
         self.value_col = value_col
         self.indicator_col = indicator_col
-        self.freq_mapping = freq_mapping if freq_mapping else {}
         self.interp_method = interp_method
 
         if self.df is not None:
@@ -51,7 +48,7 @@ class TimeSeriesPreprocessor:
         Validates the input DataFrame and required columns.
         """
         if self.df is None:
-            raise ValueError("El DataFrame no puede ser None.")
+            raise ValueError("Input DataFrame cannot be None.")
 
         required_cols = [self.index_col, self.grain_col, self.value_col]
         if self.indicator_col:
@@ -59,28 +56,25 @@ class TimeSeriesPreprocessor:
 
         missing_cols = [col for col in required_cols if col not in self.df.columns]
         if missing_cols:
-            raise ValueError(f"Faltan columnas obligatorias: {missing_cols}")
+            raise ValueError(f"Missing required column(s): {missing_cols}")
 
         if self.df[self.value_col].isnull().all():
-            raise ValueError(f"Todos los valores de la columna '{self.value_col}' están vacíos.")
+            raise ValueError(f"All values in '{self.value_col}' are missing.")
 
         for col in [self.value_col, self.indicator_col]:
             if col and col in self.df.columns and not np.issubdtype(self.df[col].dtype, np.number):
-                raise TypeError(f"La columna '{col}' debe ser numérica.")
+                raise TypeError(f"Column '{col}' must be numeric.")
 
     def normalize_dates(self):
         """
-        Ensures numeric format for index and normalizes grain labels if needed.
+        Ensures numeric format for index and encodes grain labels numerically if needed.
         """
         if not np.issubdtype(self.df[self.index_col].dtype, np.number):
             self.df[self.index_col] = pd.to_numeric(self.df[self.index_col], errors='coerce')
 
         if self.grain_col in self.df.columns:
-            if self.freq_mapping and self.df[self.grain_col].dtype == 'O':
-                self.df[self.grain_col] = self.df[self.grain_col].map(self.freq_mapping)
-
-        if self.df[self.grain_col].dtype == 'O':
-            self.df[self.grain_col] = pd.factorize(self.df[self.grain_col])[0]
+            if pd.api.types.is_object_dtype(self.df[self.grain_col].dtype):
+                self.df[self.grain_col] = pd.factorize(self.df[self.grain_col])[0]
 
     def handle_missing_values(self):
         """

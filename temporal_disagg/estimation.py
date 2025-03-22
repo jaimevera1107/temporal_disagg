@@ -24,20 +24,25 @@ class TempDisModel(TempDisBase):
     target and a high-frequency indicator, supporting multiple disaggregation methods,
     ensemble predictions, and negative value adjustment.
     """
+    def __init__(
+        self,
+        df,
+        index_col="Index",
+        grain_col="Grain",
+        value_col="y",
+        indicator_col="X",
+        conversion="sum",
+        method="chow-lin",
+        ensemble=False,
+        adjust_negative_values=False,
+        y_hat_name="y_hat",
+        interp_method="nearest",
+        **kwargs
+):
 
-    def __init__(self,
-                 df,
-                 index_col="Index",
-                 grain_col="Grain",
-                 value_col="y",
-                 indicator_col="X",
-                 conversion="sum",
-                 method="chow-lin",
-                 ensemble=False,
-                 adjust_negative_values=False,
-                 y_hat_name="y_hat",
-                 interp_method="nearest",
-                 **kwargs):
+
+
+
         """
         Initializes the disaggregation model.
 
