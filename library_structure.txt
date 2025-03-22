@@ -1,0 +1,127 @@
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----           3/21/2025  8:03 PM                .pytest_cache
+d----           3/21/2025  8:03 PM                temporal_disagg
+d----           3/21/2025  8:06 PM                temporal_disagg.egg-info
+d----           3/21/2025  8:03 PM                tests
+-a---           3/21/2025  7:29 PM           1414 .gitignore
+-a---           3/21/2025  8:07 PM              0 library_structure.txt
+-a---           3/21/2025  7:29 PM           1106 LICENSE
+-a---           3/21/2025  7:39 PM            567 pyproject.toml
+-a---           3/21/2025  7:29 PM          13724 README.md
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\.pytest_cache
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----           3/21/2025  8:03 PM                v
+-a---           3/21/2025  8:03 PM             39 .gitignore
+-a---           3/21/2025  8:03 PM            191 CACHEDIR.TAG
+-a---           3/21/2025  8:03 PM            310 README.md
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\.pytest_cache\v
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----           3/21/2025  8:03 PM                cache
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\.pytest_cache\v\cache
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---           3/21/2025  8:06 PM            891 nodeids
+-a---           3/21/2025  8:06 PM              2 stepwise
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\temporal_disagg
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----           3/21/2025  8:05 PM                __pycache__
+d----           3/21/2025  7:29 PM                models
+-a---           3/21/2025  7:29 PM           1725 __init__.py
+-a---           3/21/2025  7:29 PM           1976 aggregation.py
+-a---           3/21/2025  7:56 PM           5757 base.py
+-a---           3/21/2025  7:29 PM           2220 conversion_matrix.py
+-a---           3/21/2025  8:05 PM          10394 estimation.py
+-a---           3/21/2025  7:29 PM           2203 optimization.py
+-a---           3/21/2025  7:52 PM           4305 preprocessing.py
+-a---           3/21/2025  7:29 PM           7326 retropolation.py
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\temporal_disagg\models
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----           3/21/2025  8:01 PM                __pycache__
+-a---           3/21/2025  7:29 PM            955 __init__.py
+-a---           3/21/2025  7:29 PM           5117 chow_lin.py
+-a---           3/21/2025  7:29 PM           1487 denton_cholette.py
+-a---           3/21/2025  7:29 PM           1355 denton.py
+-a---           3/21/2025  7:29 PM           2702 dynamic_models.py
+-a---           3/21/2025  7:29 PM           1355 fast.py
+-a---           3/21/2025  7:29 PM           1338 fernandez.py
+-a---           3/21/2025  7:29 PM           2299 litterman.py
+-a---           3/21/2025  7:29 PM           1068 ols.py
+-a---           3/21/2025  7:29 PM           1146 uniform.py
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\temporal_disagg\models\__pycache__
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---           3/21/2025  8:01 PM           1057 __init__.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           5583 chow_lin.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           1883 denton_cholette.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           1751 denton.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           3072 dynamic_models.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           1709 fast.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           1695 fernandez.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           2766 litterman.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           1468 ols.cpython-310.pyc
+-a---           3/21/2025  8:01 PM           1514 uniform.cpython-310.pyc
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\temporal_disagg\__pycache__
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---           3/21/2025  8:03 PM           1819 __init__.cpython-310.pyc
+-a---           3/21/2025  8:03 PM           2137 aggregation.cpython-310.pyc
+-a---           3/21/2025  8:03 PM           6034 base.cpython-310.pyc
+-a---           3/21/2025  8:03 PM           2716 conversion_matrix.cpython-310.pyc
+-a---           3/21/2025  8:05 PM           7112 estimation.cpython-310.pyc
+-a---           3/21/2025  8:03 PM           2484 optimization.cpython-310.pyc
+-a---           3/21/2025  8:03 PM           4373 preprocessing.cpython-310.pyc
+-a---           3/21/2025  8:03 PM           6515 retropolation.cpython-310.pyc
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\temporal_disagg.egg-info
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---           3/21/2025  8:06 PM              1 dependency_links.txt
+-a---           3/21/2025  8:06 PM          14165 PKG-INFO
+-a---           3/21/2025  8:06 PM             50 requires.txt
+-a---           3/21/2025  8:06 PM            963 SOURCES.txt
+-a---           3/21/2025  8:06 PM             16 top_level.txt
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\tests
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----           3/21/2025  8:06 PM                __pycache__
+-a---           3/21/2025  7:29 PM            647 test_aggregation.py
+-a---           3/21/2025  7:29 PM            613 test_cov_matrix.py
+-a---           3/21/2025  8:02 PM           1061 test_preprocessing.py
+-a---           3/21/2025  7:29 PM           2022 test_retropolation.py
+-a---           3/21/2025  8:06 PM           1165 test_temp_dis_model.py
+
+    Directory: C:\Users\Admin\Desktop\TD\temporal_disagg\tests\__pycache__
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---           3/21/2025  8:03 PM           1600 test_aggregation.cpython-310-pytest-8.3.5.pyc
+-a---           3/21/2025  8:03 PM           2064 test_cov_matrix.cpython-310-pytest-8.3.5.pyc
+-a---           3/21/2025  8:03 PM           1714 test_preprocessing.cpython-310-pytest-8.3.5.pyc
+-a---           3/21/2025  8:03 PM           4075 test_retropolation.cpython-310-pytest-8.3.5.pyc
+-a---           3/21/2025  8:06 PM           2325 test_temp_dis_model.cpython-310-pytest-8.3.5.pyc
+

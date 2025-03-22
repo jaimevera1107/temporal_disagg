@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "temporal_disagg"
-version = "0.1.2"
+version = "0.1.3"
 description = "Library for time series temporal disaggregation"
 authors = [
   { name = "Jaime Vera-Jaramillo", email = "jaimevera1107@gmail.com" }
